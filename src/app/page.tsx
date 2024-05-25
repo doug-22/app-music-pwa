@@ -1,9 +1,21 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import Image from 'next/image'
+import styles from './page.module.css'
+import Head from 'next/head'
 
 export default function Home() {
   return (
     <main className={styles.main}>
+      <Head>
+        <meta
+          name="theme-color"
+          media="(prefers-color-scheme: dark)"
+          content="#fff"
+        />
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
+        />
+      </Head>
       <div className={styles.description}>
         <p>
           Get started by editing&nbsp;
@@ -15,7 +27,7 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            By{" "}
+            By{' '}
             <Image
               src="/vercel.svg"
               alt="Vercel Logo"
@@ -91,5 +103,5 @@ export default function Home() {
         </a>
       </div>
     </main>
-  );
+  )
 }
