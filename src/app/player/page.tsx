@@ -13,7 +13,7 @@ import SongDetails, { DataType } from '@/components/SongDetails'
 
 import CoverWaves from '../../../public/assets/Mr._Probz_-_Waves.jpg'
 // import SongWaves from '../../musics/Mr._Probz_-_Waves.mp3'
-import Cover720 from '../../../public/assets/720.png'
+import Cover720 from '../../../public/assets/i_still_love_you.png'
 import Player from '@/components/Player'
 import { useState } from 'react'
 // import { useRef } from 'react'
