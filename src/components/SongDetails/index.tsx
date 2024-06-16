@@ -1,47 +1,41 @@
-import { MusicTitle, SingerTitle, WrapperMusic } from './styles'
+import { DotsThreeVertical } from '@phosphor-icons/react'
+import { MenuButton, MusicTitle, SingerTitle, WrapperMusic } from './styles'
 import Image, { StaticImageData } from 'next/image'
+import CoverDefault from '../../../public/assets/cover_default.jpg'
 
 export interface DataType {
   title: string
   singer: string
-  cover: StaticImageData
+  cover: StaticImageData | null
   song: string
 }
 
 interface Props {
   data: DataType
-  onPlay: (data: DataType) => void
+  openMenu: () => void
 }
 
-const SongDetails: React.FC<Props> = ({ data, onPlay }) => {
-  // const audioRef = useRef<HTMLAudioElement>(null)
-
-  // const handlePlayPause = () => {
-  //   if (audioRef.current) {
-  //     if (audioRef.current?.paused) {
-  //       audioRef.current.play()
-  //     } else {
-  //       audioRef.current.pause()
-  //     }
-  //   }
-  // }
-
+const SongDetails: React.FC<Props> = ({ data, openMenu }) => {
   return (
-    <WrapperMusic>
-      <div className="song_cover">
-        <Image
-          src={data?.cover}
-          width={80}
-          height={80}
-          alt={`Capa da música ${data?.title}`}
-        />
-      </div>
-      <div className="song_details">
-        <MusicTitle>{data?.title}</MusicTitle>
-        <SingerTitle>{data?.singer}</SingerTitle>
-        <button onClick={() => onPlay(data)}>Selecionar</button>
-      </div>
-    </WrapperMusic>
+    <>
+      <WrapperMusic>
+        <div className="song_cover">
+          <Image
+            src={data?.cover ?? CoverDefault}
+            width={50}
+            height={50}
+            alt={`Capa da música ${data?.title}`}
+          />
+        </div>
+        <div className="song_details">
+          <MusicTitle>{data?.title}</MusicTitle>
+          <SingerTitle>{data?.singer}</SingerTitle>
+        </div>
+        <MenuButton onClick={openMenu}>
+          <DotsThreeVertical size={32} weight="bold" />
+        </MenuButton>
+      </WrapperMusic>
+    </>
   )
 }
 

@@ -6,7 +6,7 @@ interface Props {
 }
 
 export const WrapperPlayer = styled.div<Props>`
-  ${({ height, $expanded }) => css`
+  ${({ theme, height, $expanded }) => css`
     width: 100%;
     /* min-height: ${`${height}px`}; */
     box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 15px;
@@ -74,7 +74,7 @@ export const WrapperPlayer = styled.div<Props>`
         img {
           margin: auto;
           border-radius: 50%;
-          border: 3px solid #ad94c1;
+          border: 3px solid ${theme.colors.borderinputSearch};
         }
       }
 
@@ -95,11 +95,11 @@ export const WrapperPlayer = styled.div<Props>`
 `
 
 export const WrapperCover = styled.div<{ $expanded: boolean }>`
-  ${({ $expanded }) => css`
+  ${({ theme, $expanded }) => css`
     img {
       margin: auto;
       border-radius: ${!$expanded ? '50%' : '1rem'};
-      border: 3px solid #ad94c1;
+      border: 3px solid ${theme.colors.borderinputSearch};
     }
   `}
 `
