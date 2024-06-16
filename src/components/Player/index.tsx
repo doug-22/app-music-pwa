@@ -1,6 +1,5 @@
 /* eslint-disable no-unneeded-ternary */
-import { useRef, useState } from 'react'
-import { DataType } from '../SongDetails'
+import { useCallback, useRef, useState } from 'react'
 import { WrapperCover, WrapperPlayer } from './styles'
 import {
   CaretDown,
@@ -13,12 +12,15 @@ import {
 } from '@phosphor-icons/react'
 import Button from '../Button'
 import Image from 'next/image'
+import { useAtom, useAtomValue } from 'jotai'
+import { playlistSelectedAtom } from '@/atoms/playlist-selected-atom'
+import { musicSelectedAtom } from '@/atoms/music-selected-atom'
+import CoverDefault from '../../../public/assets/cover_default.jpg'
 
-interface Props {
-  data: DataType | null
-}
+const Player = () => {
+  const [musicSelected, setMusicSelected] = useAtom(musicSelectedAtom)
+  const playlistSelected = useAtomValue(playlistSelectedAtom)
 
-const Player: React.FC<Props> = ({ data }) => {
   const audioRef = useRef<HTMLAudioElement>(null)
 
   const [paused, setPaused] = useState(false)
@@ -57,9 +59,51 @@ const Player: React.FC<Props> = ({ data }) => {
     setExpanded(false)
   }
 
+  const handleNextMusic = useCallback(
+    (title: string) => {
+      const playlistLength = playlistSelected?.length
+        ? playlistSelected?.length
+        : 0
+      if (playlistSelected) {
+        const index = playlistSelected?.findIndex(
+          (item) => item.title === title,
+        )
+        if (playlistLength - 1 !== index) {
+          setMusicSelected(playlistSelected[index + 1])
+          setPaused(false)
+        } else {
+          setMusicSelected(playlistSelected[0])
+          setPaused(false)
+        }
+      }
+    },
+    [playlistSelected],
+  )
+
+  const handlePrevMusic = useCallback(
+    (title: string) => {
+      const playlistLength = playlistSelected?.length
+        ? playlistSelected?.length
+        : 0
+      if (playlistSelected) {
+        const index = playlistSelected?.findIndex(
+          (item) => item.title === title,
+        )
+        if (index === 0) {
+          setMusicSelected(playlistSelected[playlistLength - 1])
+          setPaused(false)
+        } else {
+          setMusicSelected(playlistSelected[index - 1])
+          setPaused(false)
+        }
+      }
+    },
+    [playlistSelected],
+  )
+
   return (
     <>
-      {data && (
+      {musicSelected && (
         <WrapperPlayer
           onClick={handleExpand}
           height={height}
@@ -73,8 +117,8 @@ const Player: React.FC<Props> = ({ data }) => {
                   icon={<CaretDown size={32} weight="fill" />}
                 />
                 <div>
-                  <h1>{data?.title}</h1>
-                  <span>{data?.singer}</span>
+                  <h1>{musicSelected?.title}</h1>
+                  <span>{musicSelected?.singer}</span>
                 </div>
               </div>
             )}
@@ -82,21 +126,24 @@ const Player: React.FC<Props> = ({ data }) => {
             <div className="wrapper_song_details">
               <WrapperCover $expanded={expanded}>
                 <Image
-                  src={data?.cover}
+                  src={musicSelected?.cover ?? CoverDefault}
                   width={expanded ? 250 : 60}
                   height={expanded ? 250 : 60}
-                  alt={`Capa da música ${data?.title}`}
+                  alt={`Capa da música ${musicSelected?.title}`}
                 />
               </WrapperCover>
               <div className="song_info">
-                <h1>{data?.title}</h1>
-                <span>{data?.singer}</span>
+                <h1>{musicSelected?.title}</h1>
+                <span>{musicSelected?.singer}</span>
               </div>
             </div>
 
             <div className="wrapper_actions">
               {expanded && (
-                <Button icon={<SkipBack size={32} weight="fill" />} />
+                <Button
+                  icon={<SkipBack size={32} weight="fill" />}
+                  onClick={() => handlePrevMusic(musicSelected?.title)}
+                />
               )}
               {paused && (
                 <Button
@@ -110,7 +157,10 @@ const Player: React.FC<Props> = ({ data }) => {
                   onClick={handlePlayPause}
                 />
               )}
-              <Button icon={<SkipForward size={32} weight="fill" />} />
+              <Button
+                icon={<SkipForward size={32} weight="fill" />}
+                onClick={() => handleNextMusic(musicSelected?.title)}
+              />
             </div>
 
             {expanded && (
@@ -121,7 +171,7 @@ const Player: React.FC<Props> = ({ data }) => {
             )}
           </>
 
-          <audio src={data?.song} ref={audioRef} autoPlay></audio>
+          <audio src={musicSelected?.song} ref={audioRef} autoPlay></audio>
         </WrapperPlayer>
       )}
     </>

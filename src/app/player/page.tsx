@@ -6,64 +6,67 @@ import {
   WrapperContainer,
   WrapperPreview,
   WrapperList,
+  Divider,
 } from './styles'
 import InputSearch from '@/components/InputSearch'
 import Button from '@/components/Button'
-import SongDetails, { DataType } from '@/components/SongDetails'
+import { DataType } from '@/components/SongDetails'
 
-import CoverWaves from '../../../public/assets/Mr._Probz_-_Waves.jpg'
-// import SongWaves from '../../musics/Mr._Probz_-_Waves.mp3'
-import Cover720 from '../../../public/assets/i_still_love_you.png'
 import Player from '@/components/Player'
-import { useState } from 'react'
-// import { useRef } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import ListSongs from '@/components/ListSongs'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { listMusicAtom } from '@/atoms/list-music-atom'
+import { musicSelectedAtom } from '@/atoms/music-selected-atom'
+import { playlistSelectedAtom } from '@/atoms/playlist-selected-atom'
 
 const PlayerPage = () => {
-  // const audioRef = useRef(null)
+  const [search, setSearch] = useState('')
 
-  const [musicSelected, setMusicSelected] = useState<DataType | null>(null)
+  const setMusicSelected = useSetAtom(musicSelectedAtom)
+  const list = useAtomValue(listMusicAtom)
 
-  const list = [
-    {
-      title: 'Waves',
-      singer: 'Mr. Probz',
-      cover: CoverWaves,
-      song: '../../musics/Mr._Probz_-_Waves.mp3',
-    },
-    {
-      title: 'I Still Love You',
-      singer: '702',
-      cover: Cover720,
-      song: '../../musics/I Still Love You.mp3',
-    },
-    // {
-    //   title: 'Música 3',
-    // },
-    // {
-    //   title: 'Música 4',
-    // },
-  ]
-
-  // const handlePlay = () => {
-  //   // const player = document.querySelector('#player')
-  //   // console.log(player?.play())
-  //   if (audioRef.current) {
-  //     audioRef.current.play()
-  //   }
-  // }
+  const [playlistSelected, setPlaylistSelected] = useAtom(playlistSelectedAtom)
 
   const handleSelectedMusic = (data: DataType) => {
     setMusicSelected(data)
   }
 
+  useEffect(() => {
+    setPlaylistSelected(list)
+  }, [list])
+
+  const playlistFiltered = useMemo(() => {
+    return (
+      playlistSelected?.filter((item) => {
+        return (
+          item?.title.toLocaleLowerCase().includes(search) ||
+          item?.singer.toLocaleLowerCase().includes(search)
+        )
+      }) ?? []
+    )
+  }, [playlistSelected, search])
+
   return (
     <>
       <WrapperContainer>
-        <InputSearch />
+        <InputSearch width="100%" onChange={(e) => setSearch(e.target.value)} />
         <WrapperOptions>
-          <Button icon={<Clock size={32} weight="fill" />} />
-          <Button icon={<Heart size={32} weight="fill" />} />
-          <Button icon={<Playlist size={32} weight="fill" />} />
+          <Button
+            icon={<Clock size={32} weight="fill" />}
+            align="vertical"
+            label="Recent"
+          />
+          <Button
+            icon={<Heart size={32} weight="fill" />}
+            align="vertical"
+            label="Favorites"
+          />
+          <Button
+            icon={<Playlist size={32} weight="fill" />}
+            align="vertical"
+            label="Playlist"
+          />
         </WrapperOptions>
         <WrapperPreview>
           <Button
@@ -71,28 +74,18 @@ const PlayerPage = () => {
             label="Ordem aleatória"
           />
         </WrapperPreview>
+        <Divider>
+          <span>List</span>
+        </Divider>
         <WrapperList>
-          {list?.map((music, idx) => (
-            <SongDetails key={idx} data={music} onPlay={handleSelectedMusic} />
-            // <WrapperMusic key={idx}>
-            //   <div className="song_cover">
-            //     <Image
-            //       src={music?.cover}
-            //       alt={`Capa da música ${music?.title}`}
-            //     />
-            //   </div>
-            //   <div className="song_details">
-            //     <MusicTitle>{music?.title}</MusicTitle>
-            //     <SingerTitle>{music?.singer}</SingerTitle>
-            //     <audio src={music?.song} ref={audioRef}></audio>
-            //     <button onClick={handlePlay}>Play</button>
-            //   </div>
-            // </WrapperMusic>
-          ))}
+          <ListSongs
+            list={playlistFiltered}
+            setSelectedMusic={handleSelectedMusic}
+          />
         </WrapperList>
       </WrapperContainer>
 
-      <Player data={musicSelected} />
+      <Player />
     </>
   )
 }
