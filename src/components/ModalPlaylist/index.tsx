@@ -40,15 +40,20 @@ const Modal: React.FC<Props> = ({ closeModal, data }) => {
     (title: string) => {
       const newArray = playlist?.map((item) => {
         if (item?.title === title) {
-          return {
-            ...item,
-            songs: [...item?.songs, data],
+          const index = item?.songs.findIndex((item) => item?.title === data?.title)
+          if(index === -1) {
+            return {
+              ...item,
+              songs: [...item?.songs, data],
+            }
           }
         }
         return item
       })
 
       setPlaylist(newArray)
+      toast.success('Song added to playlist!')
+      closeModal()
     },
     [playlist, data],
   )

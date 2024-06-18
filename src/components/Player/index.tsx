@@ -152,6 +152,7 @@ const Player: React.FC<Props> = ({ setFavoriteMusic }) => {
   useEffect(() => {
     if (musicSelected && audioRef.current) {
       audioRef.current.play()
+      setPaused(false)
     }
   }, [musicSelected])
 
