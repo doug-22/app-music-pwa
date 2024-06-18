@@ -6,9 +6,7 @@ export const WrapperList = styled.div`
 
 export const Menu = styled.div<{ $hide: boolean }>`
   ${({ theme, $hide }) => css`
-    width: 120px;
-
-    border-radius: 10px;
+    width: 150px;
 
     background-color: ${theme.colors.white};
     box-shadow: 1px 1px 3px ${theme.colors.shadow};
@@ -35,6 +33,7 @@ export const Menu = styled.div<{ $hide: boolean }>`
     ${!$hide
       ? css`
           animation: ${FadeOut} 0.5s forwards;
+          display: none;
         `
       : css`
           animation: ${FadeIn} 0.5s none;

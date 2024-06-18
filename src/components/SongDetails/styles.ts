@@ -4,9 +4,15 @@ export const WrapperMusic = styled.div`
   ${({ theme }) => css`
     display: flex;
     align-items: center;
-    gap: 2rem;
 
     border-bottom: 1px solid ${theme.colors.border};
+
+    .wrapper_infos {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      width: 100%;
+    }
 
     .song_cover {
       padding: 1rem;
@@ -39,8 +45,6 @@ export const MusicTitle = styled.span`
 `
 export const MenuButton = styled.button`
   ${({ theme }) => css`
-    margin-left: auto;
-
     background-color: transparent;
     border: none;
 
