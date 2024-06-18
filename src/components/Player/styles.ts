@@ -98,8 +98,12 @@ export const WrapperCover = styled.div<{ $expanded: boolean }>`
   ${({ theme, $expanded }) => css`
     img {
       margin: auto;
-      border-radius: ${!$expanded ? '50%' : '1rem'};
+      border-radius: ${!$expanded ? '50%' : '0'};
       border: 3px solid ${theme.colors.borderinputSearch};
     }
   `}
+`
+
+export const WrapperSlider = styled.div`
+  width: 80%;
 `

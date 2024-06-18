@@ -24,6 +24,7 @@ export const WrapperList = styled.div`
   flex-direction: column;
 
   overflow: auto;
+  padding-bottom: 80px;
 `
 export const Divider = styled.div`
   ${({ theme }) => css`
@@ -54,5 +55,29 @@ export const Menu = styled.div`
 
     background-color: ${theme.colors.white};
     box-shadow: 1px 1px 3px ${theme.colors.shadow};
+  `}
+`
+
+export const WrapperListPlaylist = styled.ul`
+  ${({ theme }) => css`
+    width: 100%;
+
+    li {
+      font-size: ${theme.font.sizes.medium};
+      padding: 1rem 0;
+      border-bottom: 1px solid ${theme.colors.border};
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      span {
+        font-size: ${theme.font.sizes.small};
+        color: ${theme.colors.grayFont};
+      }
+    }
+
+    li:first-child {
+      border-top: 1px solid ${theme.colors.border};
+    }
   `}
 `
