@@ -40,8 +40,10 @@ const Modal: React.FC<Props> = ({ closeModal, data }) => {
     (title: string) => {
       const newArray = playlist?.map((item) => {
         if (item?.title === title) {
-          const index = item?.songs.findIndex((item) => item?.title === data?.title)
-          if(index === -1) {
+          const index = item?.songs.findIndex(
+            (item) => item?.title === data?.title,
+          )
+          if (index === -1) {
             return {
               ...item,
               songs: [...item?.songs, data],
